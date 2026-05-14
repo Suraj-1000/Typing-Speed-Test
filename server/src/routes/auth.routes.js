@@ -2,6 +2,9 @@ const express = require('express');
 const { register, login, logout, getMe } = require('../controllers/auth.controller');
 const protectRoute = require('../middleware/protectRoute');
 
+/**
+ * Authentication Routes
+ */
 const router = express.Router();
 
 router.post('/register', register);
