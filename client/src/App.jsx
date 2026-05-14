@@ -5,6 +5,10 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 
+/**
+ * Main Application Component
+ * Sets up routing and authentication state checking
+ */
 function App() {
   const { user, checkAuth, logout } = useAuthStore();
 
