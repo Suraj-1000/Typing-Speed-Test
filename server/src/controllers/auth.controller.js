@@ -111,6 +111,11 @@ const logout = (req, res) => {
   }
 };
 
+/**
+ * Get current logged in user details
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 const getMe = async (req, res) => {
   try {
     const user = await prisma.user.findUnique({
