@@ -3,6 +3,10 @@ import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '../store/useAuthStore';
 
+/**
+ * Register Page Component
+ * Handles new user registration
+ */
 const Register = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
