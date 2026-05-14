@@ -3,6 +3,9 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:5000/api/auth';
 
+/**
+ * Zustand store for authentication state management
+ */
 export const useAuthStore = create((set) => ({
   user: null,
   isAuthenticated: false,
