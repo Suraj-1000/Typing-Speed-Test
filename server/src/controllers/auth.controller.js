@@ -96,6 +96,11 @@ const login = async (req, res) => {
   }
 };
 
+/**
+ * Logout user by clearing cookies
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 const logout = (req, res) => {
   try {
     res.cookie('jwt', '', { maxAge: 0 });
