@@ -1,5 +1,10 @@
 const jwt = require('jsonwebtoken');
 
+/**
+ * Generate JWT token and set it in a cookie
+ * @param {string} userId - The user ID
+ * @param {Object} res - Express response object
+ */
 const generateToken = (userId, res) => {
   const token = jwt.sign({ userId }, process.env.JWT_SECRET || 'supersecret', {
     expiresIn: '15d',
