@@ -3,6 +3,10 @@ import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '../store/useAuthStore';
 
+/**
+ * Login Page Component
+ * Handles user authentication via username and password
+ */
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
