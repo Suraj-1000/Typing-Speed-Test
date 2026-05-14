@@ -1,6 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
+/**
+ * Home Page Component
+ * Landing page with dynamic animations and calls to action
+ */
 const Home = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh]">
