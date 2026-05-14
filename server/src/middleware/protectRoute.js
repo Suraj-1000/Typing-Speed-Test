@@ -3,6 +3,12 @@ const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
+/**
+ * Middleware to protect routes requiring authentication
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 const protectRoute = async (req, res, next) => {
   try {
     const token = req.cookies.jwt;
