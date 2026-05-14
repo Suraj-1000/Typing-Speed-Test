@@ -61,6 +61,11 @@ const register = async (req, res) => {
   }
 };
 
+/**
+ * Authenticate and login user
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 const login = async (req, res) => {
   try {
     const { username, password } = req.body;
