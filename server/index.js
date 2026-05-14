@@ -4,6 +4,10 @@ const { Server } = require('socket.io');
 const app = require('./src/app');
 
 const PORT = process.env.PORT || 5000;
+
+/**
+ * HTTP Server Instance
+ */
 const server = http.createServer(app);
 
 const io = new Server(server, {
