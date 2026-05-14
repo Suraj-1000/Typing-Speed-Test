@@ -4,6 +4,11 @@ const generateToken = require('../utils/generateToken');
 
 const prisma = new PrismaClient();
 
+/**
+ * Register a new user
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 const register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
