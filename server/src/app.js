@@ -6,6 +6,9 @@ const cookieParser = require('cookie-parser');
 
 const authRoutes = require('./routes/auth.routes');
 
+/**
+ * Express application instance
+ */
 const app = express();
 
 // Middleware
