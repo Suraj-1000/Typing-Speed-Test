@@ -2,7 +2,9 @@ const bcrypt = require('bcrypt');
 const { PrismaClient } = require('@prisma/client');
 const generateToken = require('../utils/generateToken');
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  datasourceUrl: process.env.DATABASE_URL
+});
 
 /**
  * Register a new user
