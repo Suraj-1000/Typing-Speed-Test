@@ -5,6 +5,7 @@ const compression = require('compression');
 const cookieParser = require('cookie-parser');
 
 const authRoutes = require('./routes/auth.routes');
+const scoreRoutes = require('./routes/score.routes');
 
 /**
  * Express application instance
@@ -20,6 +21,7 @@ app.use(cookieParser());
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/score', scoreRoutes);
 app.get('/', (req, res) => {
   res.json({ message: 'Typing Speed Test API is running' });
 });
