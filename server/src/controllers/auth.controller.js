@@ -1,8 +1,6 @@
 const bcrypt = require('bcrypt');
-const { PrismaClient } = require('@prisma/client');
+const prisma = require('../utils/prisma');
 const generateToken = require('../utils/generateToken');
-
-const prisma = new PrismaClient();
 
 /**
  * Register a new user
