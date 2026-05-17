@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { PrismaClient } = require('@prisma/client');
 
-const prisma = new PrismaClient({ accelerateUrl: process.env.DATABASE_URL });
+const prisma = new PrismaClient();
 
 /**
  * Middleware to protect routes requiring authentication
