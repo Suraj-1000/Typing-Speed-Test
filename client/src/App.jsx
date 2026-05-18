@@ -10,11 +10,20 @@ import Register from './pages/Register';
  * Sets up routing and authentication state checking
  */
 function App() {
-  const { user, checkAuth, logout } = useAuthStore();
+  const { user, checkAuth, logout, isCheckingAuth } = useAuthStore();
 
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
+
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center gap-4 select-none">
+        <div className="w-12 h-12 rounded-full border-4 border-primary border-t-transparent animate-spin" />
+        <p className="font-mono text-sm tracking-widest text-primary animate-pulse font-bold">LOADING TYPOVELOCITY...</p>
+      </div>
+    );
+  }
 
   return (
     <Router>
