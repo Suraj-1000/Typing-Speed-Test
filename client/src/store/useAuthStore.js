@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 import axios from 'axios';
 
+// Configure Axios to always send credentials (cookies) in cross-origin requests
+axios.defaults.withCredentials = true;
+
 const API_URL = 'http://localhost:5000/api/auth';
 
 /**
