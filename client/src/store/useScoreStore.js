@@ -7,7 +7,7 @@ const API_URL = 'http://localhost:5000/api/score';
 /**
  * Zustand store for managing user typing speed scores
  */
-export const useScoreStore = create((set, get) => ({
+export const useScoreStore = create((set) => ({
   history: [],
   isLoading: false,
   error: null,
