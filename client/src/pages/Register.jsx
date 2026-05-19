@@ -26,7 +26,7 @@ const Register = () => {
     try {
       await register(username, email, password);
       navigate('/');
-    } catch (err) {
+    } catch (_) {
       // Error is handled by store
     }
   };
