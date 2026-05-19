@@ -25,7 +25,7 @@ const Login = () => {
     try {
       await login(username, password);
       navigate('/');
-    } catch (err) {
+    } catch (_) {
       // Error is handled by store
     }
   };
