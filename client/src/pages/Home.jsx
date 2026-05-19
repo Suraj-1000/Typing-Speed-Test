@@ -43,6 +43,7 @@ const Home = () => {
     if (isFinished) {
       const stats = getStats();
       if (user) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsSaving(true);
         setSaveError(null);
         saveScore({
