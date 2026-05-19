@@ -3,6 +3,7 @@ const http = require('http');
 const { Server } = require('socket.io');
 const app = require('./src/app');
 
+// Define the port to run the server on
 const PORT = process.env.PORT || 5000;
 
 /**
