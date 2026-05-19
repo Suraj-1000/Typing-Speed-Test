@@ -26,6 +26,7 @@ function App() {
   }
 
   return (
+    // Application Router setup
     <Router>
       <div className="min-h-screen bg-background text-foreground flex flex-col">
         <header className="p-4 border-b border-border glass-panel sticky top-0 z-50">
