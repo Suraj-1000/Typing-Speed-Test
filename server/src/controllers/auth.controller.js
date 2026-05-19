@@ -147,3 +147,4 @@ module.exports = {
   logout,
   getMe
 };
+// End of auth controller
