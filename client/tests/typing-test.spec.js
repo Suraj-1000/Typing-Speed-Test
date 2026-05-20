@@ -14,9 +14,9 @@ test.describe('Typing Velocity - Core Typing Game', () => {
     await expect(page.locator('h2')).toContainText('Test Your Typing Velocity');
 
     // 2. Default stats should be 0 or standard defaults
-    const speedStat = page.locator('div:has-text("Speed")').locator('span').first();
-    const accuracyStat = page.locator('div:has-text("Accuracy")').locator('span').first();
-    const errorsStat = page.locator('div:has-text("Errors")').locator('span').first();
+    const speedStat = page.locator('p:has-text("Speed") + div > span').first();
+    const accuracyStat = page.locator('p:has-text("Accuracy") + div > span').first();
+    const errorsStat = page.locator('p:has-text("Errors") + div > span').first();
 
     await expect(speedStat).toHaveText('0');
     await expect(accuracyStat).toHaveText('100'); // Default accuracy is 100%
@@ -27,7 +27,7 @@ test.describe('Typing Velocity - Core Typing Game', () => {
   });
 
   test('should change duration when time limits are clicked', async ({ page }) => {
-    const timeStat = page.locator('div:has-text("Time")').locator('span').first();
+    const timeStat = page.locator('p:has-text("Time") + div > span').first();
 
     // Default duration should be 30s
     await expect(timeStat).toHaveText('30');
@@ -43,11 +43,11 @@ test.describe('Typing Velocity - Core Typing Game', () => {
 
   test('should support typing through a paragraph and showing results', async ({ page }) => {
     // Locate the paragraph container
-    const displayContainer = page.locator('.cursor-text');
+    const displayContainer = page.locator('div.cursor-text');
     await expect(displayContainer).toBeVisible();
 
     // Get the paragraph text
-    const paragraphText = await page.locator('.font-mono.text-muted-foreground').textContent();
+    const paragraphText = await page.locator('.cursor-text > div.font-mono').textContent();
     expect(paragraphText).toBeTruthy();
     expect(paragraphText.length).toBeGreaterThan(10);
 
@@ -75,7 +75,7 @@ test.describe('Typing Velocity - Core Typing Game', () => {
 
   test('should track errors correctly during typing', async ({ page }) => {
     // Get paragraph text
-    const paragraphText = await page.locator('.font-mono.text-muted-foreground').textContent();
+    const paragraphText = await page.locator('.cursor-text > div.font-mono').textContent();
     const wrongChar = paragraphText[0] === 'a' ? 'b' : 'a';
 
     // Focus and type a wrong character
@@ -84,11 +84,11 @@ test.describe('Typing Velocity - Core Typing Game', () => {
     await page.keyboard.type(wrongChar);
 
     // Verify errors stat increments to 1
-    const errorsStat = page.locator('div:has-text("Errors")').locator('span').first();
+    const errorsStat = page.locator('p:has-text("Errors") + div > span').first();
     await expect(errorsStat).toHaveText('1');
 
     // Verify accuracy decreases
-    const accuracyStat = page.locator('div:has-text("Accuracy")').locator('span').first();
+    const accuracyStat = page.locator('p:has-text("Accuracy") + div > span').first();
     const accuracyVal = await accuracyStat.textContent();
     expect(parseInt(accuracyVal, 10)).toBeLessThan(100);
   });
