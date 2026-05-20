@@ -47,7 +47,7 @@ test.describe('Typing Velocity - Core Typing Game', () => {
     await expect(displayContainer).toBeVisible();
 
     // Get the paragraph text
-    const paragraphText = await page.locator('.cursor-text > div.font-mono').textContent();
+    const paragraphText = await page.locator('div.cursor-text > div.text-xl').textContent();
     expect(paragraphText).toBeTruthy();
     expect(paragraphText.length).toBeGreaterThan(10);
 
@@ -75,7 +75,7 @@ test.describe('Typing Velocity - Core Typing Game', () => {
 
   test('should track errors correctly during typing', async ({ page }) => {
     // Get paragraph text
-    const paragraphText = await page.locator('.cursor-text > div.font-mono').textContent();
+    const paragraphText = await page.locator('div.cursor-text > div.text-xl').textContent();
     const wrongChar = paragraphText[0] === 'a' ? 'b' : 'a';
 
     // Focus and type a wrong character
