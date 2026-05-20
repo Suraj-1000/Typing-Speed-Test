@@ -92,4 +92,10 @@ test.describe('Typing Velocity - Core Typing Game', () => {
     const accuracyVal = await accuracyStat.textContent();
     expect(parseInt(accuracyVal, 10)).toBeLessThan(100);
   });
+
+  test('should navigate to home page when logo is clicked', async ({ page }) => {
+    await page.goto('/login');
+    await page.click('h1:has-text("TypoVelocity")');
+    await expect(page).toHaveURL(/\//);
+  });
 });
