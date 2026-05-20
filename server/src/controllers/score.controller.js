@@ -26,13 +26,23 @@ const saveScore = async (req, res) => {
       }
     });
 
-    // Optional: update user xp and level based on score
+    // Update user xp and level based on score
     const xpGained = Math.round(netWpm * (accuracy / 100));
     
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { xp: true }
+    });
+
+    const newXp = (user?.xp || 0) + xpGained;
+    // Each level requires 1000 XP (e.g. Level 1: 0-999 XP, Level 2: 1000-1999 XP, etc.)
+    const newLevel = Math.floor(newXp / 1000) + 1;
+
     await prisma.user.update({
       where: { id: userId },
       data: {
-        xp: { increment: xpGained }
+        xp: newXp,
+        level: newLevel
       }
     });
 
