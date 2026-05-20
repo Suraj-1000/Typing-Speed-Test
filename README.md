@@ -104,3 +104,27 @@ Open `http://localhost:5173` in your browser to experience TypoVelocity!
 - **Cookies**: Session JWTs are placed inside `httpOnly: true` cookies to block XSS vector attacks.
 - **CORS Policies**: Explicit origin and allowed credential rules to ensure other websites cannot perform CSRF requests.
 - **Database Safety**: Raw password credentials are hashed via `bcrypt` with a work salt factor of 10 prior to DB writes.
+
+---
+
+## 🧪 Running QA End-to-End Tests
+
+We have integrated a comprehensive end-to-end testing suite using **Playwright** to assert the functionality of the core typing engine and authentication flows (login, registration, error alerts, levels, WPM calculation, and logout).
+
+### Prerequisite
+Ensure client and server dependencies are installed.
+
+### Run Tests in Headless Mode
+To run all tests inside headless Chromium:
+```bash
+cd client
+npm run test:e2e
+```
+
+### Run Tests with Interactive UI
+To open the interactive Playwright Test runner UI:
+```bash
+cd client
+npm run test:e2e:ui
+```
+
