@@ -69,7 +69,7 @@ test.describe('Typing Velocity - Authentication Flows', () => {
     await expect(page).toHaveURL(/\//);
 
     // Header should display the logged-in user profile with level details
-    const profileInfo = page.locator('header nav span');
+    const profileInfo = page.locator('header nav > span');
     await expect(profileInfo).toContainText('speedtyper');
     await expect(profileInfo).toContainText('Lvl 5');
   });
@@ -144,7 +144,7 @@ test.describe('Typing Velocity - Authentication Flows', () => {
     await expect(page).toHaveURL(/\//);
 
     // Profile details in header should update
-    const profileInfo = page.locator('header nav span');
+    const profileInfo = page.locator('header nav > span');
     await expect(profileInfo).toContainText('fastfingers');
     await expect(profileInfo).toContainText('Lvl 1');
   });
@@ -169,7 +169,7 @@ test.describe('Typing Velocity - Authentication Flows', () => {
 
     await page.goto('/');
 
-    const profileInfo = page.locator('header nav span');
+    const profileInfo = page.locator('header nav > span');
     await expect(profileInfo).toContainText('speedtyper');
 
     // Setup mock logout
