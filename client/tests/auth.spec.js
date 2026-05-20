@@ -197,4 +197,29 @@ test.describe('Typing Velocity - Authentication Flows', () => {
     const loginLink = page.locator('header nav a:has-text("Login")');
     await expect(loginLink).toBeVisible();
   });
+
+  test('should show error alert when registration fails', async ({ page }) => {
+    await page.goto('/register');
+
+    // Setup mock register failure (400 Bad Request)
+    await page.route('**/api/auth/register', async (route) => {
+      await route.fulfill({
+        status: 400,
+        contentType: 'application/json',
+        body: JSON.stringify({ error: 'Username or email already exists' }),
+      });
+    });
+
+    // Fill registration info
+    await page.locator('input[type="text"]').fill('existinguser');
+    await page.locator('input[type="email"]').fill('existing@user.com');
+    await page.locator('input[type="password"]').fill('somepassword');
+
+    // Submit form
+    await page.click('button[type="submit"]');
+
+    // Assert error alert displays
+    const errorAlert = page.locator('div:has-text("Username or email already exists")').first();
+    await expect(errorAlert).toBeVisible();
+  });
 });
