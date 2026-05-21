@@ -24,7 +24,7 @@
 }
 
 @layer base {
-  :root {
+  :root, .theme-dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
     --card: 240 10% 3.9%;
@@ -44,6 +44,98 @@
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
+    --radius: 0.5rem;
+  }
+
+  .theme-nord {
+    --background: 220 16% 16%;
+    --foreground: 210 17% 98%;
+    --card: 220 16% 20%;
+    --card-foreground: 210 17% 98%;
+    --popover: 220 16% 16%;
+    --popover-foreground: 210 17% 98%;
+    --primary: 193 43% 67%;
+    --primary-foreground: 220 16% 16%;
+    --secondary: 220 16% 22%;
+    --secondary-foreground: 210 17% 98%;
+    --muted: 220 16% 22%;
+    --muted-foreground: 218 10% 65%;
+    --accent: 193 43% 67%;
+    --accent-foreground: 220 16% 16%;
+    --destructive: 354 70% 54%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 16% 25%;
+    --input: 220 16% 25%;
+    --ring: 193 43% 67%;
+    --radius: 0.5rem;
+  }
+
+  .theme-cyberpunk {
+    --background: 280 50% 3%;
+    --foreground: 180 100% 90%;
+    --card: 280 40% 6%;
+    --card-foreground: 180 100% 90%;
+    --popover: 280 50% 3%;
+    --popover-foreground: 180 100% 90%;
+    --primary: 327 96% 61%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 280 30% 12%;
+    --secondary-foreground: 180 100% 90%;
+    --muted: 280 30% 12%;
+    --muted-foreground: 60 100% 70%;
+    --accent: 327 96% 61%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 327 96% 30%;
+    --input: 280 30% 12%;
+    --ring: 327 96% 61%;
+    --radius: 0.25rem;
+  }
+
+  .theme-dracula {
+    --background: 231 15% 18%;
+    --foreground: 60 30% 96%;
+    --card: 231 15% 22%;
+    --card-foreground: 60 30% 96%;
+    --popover: 231 15% 18%;
+    --popover-foreground: 60 30% 96%;
+    --primary: 265 89% 78%;
+    --primary-foreground: 231 15% 18%;
+    --secondary: 231 15% 25%;
+    --secondary-foreground: 60 30% 96%;
+    --muted: 231 15% 25%;
+    --muted-foreground: 115 100% 80%;
+    --accent: 265 89% 78%;
+    --accent-foreground: 231 15% 18%;
+    --destructive: 0 100% 67%;
+    --destructive-foreground: 231 15% 18%;
+    --border: 231 15% 30%;
+    --input: 231 15% 28%;
+    --ring: 265 89% 78%;
+    --radius: 0.5rem;
+  }
+
+  .theme-rosepine {
+    --background: 248 24% 12%;
+    --foreground: 247 24% 92%;
+    --card: 249 22% 16%;
+    --card-foreground: 247 24% 92%;
+    --popover: 248 24% 12%;
+    --popover-foreground: 247 24% 92%;
+    --primary: 343 35% 72%;
+    --primary-foreground: 248 24% 12%;
+    --secondary: 249 22% 16%;
+    --secondary-foreground: 247 24% 92%;
+    --muted: 249 22% 16%;
+    --muted-foreground: 35 60% 80%;
+    --accent: 343 35% 72%;
+    --accent-foreground: 248 24% 12%;
+    --destructive: 2 55% 63%;
+    --destructive-foreground: 248 24% 12%;
+    --border: 248 12% 21%;
+    --input: 248 12% 21%;
+    --ring: 343 35% 72%;
     --radius: 0.5rem;
   }
 }
