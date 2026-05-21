@@ -9,7 +9,18 @@ const PARAGRAPHS = [
   "Modern web applications require premium designs and smooth micro-animations. Vibrant colors, clean typography, and responsive layouts combine to create unforgettable digital experiences."
 ];
 
-export const useTypingTest = (durationLimit = 30, { onKeypress, onError, onSuccess } = {}) => {
+const truncateToWords = (text, wordLimit) => {
+  const words = text.split(/\s+/);
+  if (words.length <= wordLimit) return text;
+  return words.slice(0, wordLimit).join(' ');
+};
+
+/**
+ * useTypingTest Hook
+ * Manages core typing speed game mechanics.
+ * Supports 'time' and 'words' modes.
+ */
+export const useTypingTest = (mode = 'time', limit = 30, { onKeypress, onError, onSuccess } = {}) => {
   const callbacksRef = useRef({ onKeypress, onError, onSuccess });
   useEffect(() => {
     callbacksRef.current = { onKeypress, onError, onSuccess };
@@ -17,7 +28,7 @@ export const useTypingTest = (durationLimit = 30, { onKeypress, onError, onSucce
 
   const [paragraph, setParagraph] = useState('');
   const [typedText, setTypedText] = useState('');
-  const [timeRemaining, setTimeRemaining] = useState(durationLimit);
+  const [timeRemaining, setTimeRemaining] = useState(mode === 'time' ? limit : 0);
   const [isActive, setIsActive] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [errors, setErrors] = useState(0);
@@ -28,15 +39,19 @@ export const useTypingTest = (durationLimit = 30, { onKeypress, onError, onSucce
   // Initialize/Reset test
   const resetTest = useCallback(() => {
     const randomIdx = Math.floor(Math.random() * PARAGRAPHS.length);
-    setParagraph(PARAGRAPHS[randomIdx]);
+    let text = PARAGRAPHS[randomIdx];
+    if (mode === 'words') {
+      text = truncateToWords(text, limit);
+    }
+    setParagraph(text);
     setTypedText('');
-    setTimeRemaining(durationLimit);
+    setTimeRemaining(mode === 'time' ? limit : 0);
     setIsActive(false);
     setIsFinished(false);
     setErrors(0);
     setTotalTyped(0);
     if (timerRef.current) clearInterval(timerRef.current);
-  }, [durationLimit]);
+  }, [mode, limit]);
 
   useEffect(() => {
     resetTest();
@@ -47,28 +62,33 @@ export const useTypingTest = (durationLimit = 30, { onKeypress, onError, onSucce
 
   // Timer logic
   useEffect(() => {
-    if (isActive && timeRemaining > 0) {
+    if (isActive) {
       timerRef.current = setInterval(() => {
         setTimeRemaining((prev) => {
-          if (prev <= 1) {
-            setIsActive(false);
-            setIsFinished(true);
-            if (timerRef.current) clearInterval(timerRef.current);
-            if (callbacksRef.current.onSuccess) callbacksRef.current.onSuccess();
-            return 0;
+          if (mode === 'time') {
+            if (prev <= 1) {
+              setIsActive(false);
+              setIsFinished(true);
+              if (timerRef.current) clearInterval(timerRef.current);
+              if (callbacksRef.current.onSuccess) callbacksRef.current.onSuccess();
+              return 0;
+            }
+            return prev - 1;
+          } else {
+            // Words mode counts up
+            return prev + 1;
           }
-          return prev - 1;
         });
       }, 1000);
     }
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [isActive, timeRemaining]);
+  }, [isActive, mode]);
 
   // Calculate live stats
   const getStats = useCallback(() => {
-    const elapsedSeconds = durationLimit - timeRemaining;
+    const elapsedSeconds = mode === 'time' ? (limit - timeRemaining) : timeRemaining;
     const elapsedTimeMin = elapsedSeconds > 0 ? elapsedSeconds / 60 : 0.01;
 
     let correctChars = 0;
@@ -91,7 +111,7 @@ export const useTypingTest = (durationLimit = 30, { onKeypress, onError, onSucce
       errors,
       elapsedSeconds
     };
-  }, [typedText, paragraph, totalTyped, errors, durationLimit, timeRemaining]);
+  }, [typedText, paragraph, totalTyped, errors, limit, timeRemaining, mode]);
 
   // Key press handler
   const handleKeyDown = useCallback((e) => {

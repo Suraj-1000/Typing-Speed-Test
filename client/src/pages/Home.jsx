@@ -18,7 +18,8 @@ import { Keyboard, Flame, Volume2, VolumeX } from 'lucide-react';
 const Home = () => {
   const { user } = useAuthStore();
   const { saveScore } = useScoreStore();
-  const [duration, setDuration] = useState(30);
+  const [mode, setMode] = useState('time'); // 'time' or 'words'
+  const [limit, setLimit] = useState(30);
 
   const { soundEnabled, playClick, playError, playSuccess, toggleSound } = useSoundEffects();
 
@@ -32,7 +33,7 @@ const Home = () => {
     resetTest,
     handleKeyDown,
     getStats
-  } = useTypingTest(duration, {
+  } = useTypingTest(mode, limit, {
     onKeypress: playClick,
     onError: playError,
     onSuccess: playSuccess
@@ -41,10 +42,15 @@ const Home = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState(null);
 
-  // Restart the test when duration changes
+  // Set default limits on mode switch
+  useEffect(() => {
+    setLimit(mode === 'time' ? 30 : 25);
+  }, [mode]);
+
+  // Restart the test when mode or limit changes
   useEffect(() => {
     resetTest();
-  }, [duration, resetTest]);
+  }, [mode, limit, resetTest]);
 
   const [wpmHistory, setWpmHistory] = useState([]);
 
@@ -72,8 +78,8 @@ const Home = () => {
         setIsSaving(true);
         setSaveError(null);
         saveScore({
-          mode: 'time',
-          duration,
+          mode,
+          duration: stats.elapsedSeconds,
           rawWpm: stats.rawWpm,
           netWpm: stats.netWpm,
           accuracy: stats.accuracy,
@@ -83,7 +89,7 @@ const Home = () => {
           .finally(() => setIsSaving(false));
       }
     }
-  }, [isFinished, user, getStats, duration, saveScore]);
+  }, [isFinished, user, getStats, mode, saveScore]);
 
   const liveStats = getStats();
 
@@ -111,30 +117,60 @@ const Home = () => {
       {/* Main Play Area */}
       {!isFinished ? (
         <div className="flex flex-col gap-6">
-          {/* Duration Selector */}
+          {/* Mode & Limit Selector Row */}
           {!isActive && (
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="flex justify-center gap-6 items-center flex-wrap"
             >
+              {/* Mode Toggle Button Group */}
+              <div className="flex gap-1 bg-secondary/30 p-1 rounded-xl border border-white/5">
+                <button
+                  onClick={() => setMode('time')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                    mode === 'time' 
+                      ? 'bg-primary text-primary-foreground shadow' 
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                  id="mode-time-btn"
+                >
+                  Time
+                </button>
+                <button
+                  onClick={() => setMode('words')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                    mode === 'words' 
+                      ? 'bg-primary text-primary-foreground shadow' 
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                  id="mode-words-btn"
+                >
+                  Words
+                </button>
+              </div>
+
+              {/* Limit Options Row */}
               <div className="flex gap-2 items-center">
-                <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider font-mono">Time Limit:</span>
-                {[15, 30, 60].map((time) => (
+                <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider font-mono">
+                  {mode === 'time' ? 'Time Limit:' : 'Word Limit:'}
+                </span>
+                {(mode === 'time' ? [15, 30, 60] : [10, 25, 50, 100]).map((option) => (
                   <button
-                    key={time}
-                    onClick={() => setDuration(time)}
+                    key={option}
+                    onClick={() => setLimit(option)}
                     className={`px-4 py-1.5 rounded-lg text-xs font-mono font-bold border transition-all cursor-pointer ${
-                      duration === time
+                      limit === option
                         ? 'bg-primary/20 text-primary border-primary/50'
                         : 'bg-secondary/40 text-muted-foreground border-transparent hover:border-white/10'
                     }`}
                   >
-                    {time}s
+                    {option}{mode === 'time' ? 's' : ''}
                   </button>
                 ))}
               </div>
 
+              {/* Sound toggle controls */}
               <div className="flex items-center gap-2 border-l border-white/10 pl-6">
                 <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider font-mono">Sound:</span>
                 <button
