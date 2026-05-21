@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { useAuthStore } from './store/useAuthStore';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ThemeSelector from './components/ThemeSelector';
+import LevelUpModal from './components/LevelUpModal';
 
 /**
  * Main Application Component
@@ -12,6 +13,21 @@ import ThemeSelector from './components/ThemeSelector';
  */
 function App() {
   const { user, checkAuth, logout, isCheckingAuth } = useAuthStore();
+  const [showLevelUp, setShowLevelUp] = useState(false);
+  const [levelUpData, setLevelUpData] = useState({ oldLevel: 0, newLevel: 0 });
+  const prevLevelRef = useRef(null);
+
+  useEffect(() => {
+    if (user) {
+      if (prevLevelRef.current !== null && user.level > prevLevelRef.current) {
+        setLevelUpData({ oldLevel: prevLevelRef.current, newLevel: user.level });
+        setShowLevelUp(true);
+      }
+      prevLevelRef.current = user.level;
+    } else {
+      prevLevelRef.current = null;
+    }
+  }, [user]);
 
   useEffect(() => {
     checkAuth();
@@ -68,6 +84,12 @@ function App() {
             <Route path="/register" element={<Register />} />
           </Routes>
         </main>
+        <LevelUpModal
+          isOpen={showLevelUp}
+          oldLevel={levelUpData.oldLevel}
+          newLevel={levelUpData.newLevel}
+          onClose={() => setShowLevelUp(false)}
+        />
       </div>
     </Router>
   );
