@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../store/useAuthStore';
 import { useScoreStore } from '../store/useScoreStore';
 import { useTypingTest } from '../hooks/useTypingTest';
 import { useSoundEffects } from '../hooks/useSoundEffects';
 import TypingDisplay from '../components/TypingDisplay';
 import StatsPanel from '../components/StatsPanel';
+import LiveWpmChart from '../components/LiveWpmChart';
 import ResultModal from '../components/ResultModal';
 import HistoryPanel from '../components/HistoryPanel';
 import { Keyboard, Flame, Volume2, VolumeX } from 'lucide-react';
@@ -44,6 +45,23 @@ const Home = () => {
   useEffect(() => {
     resetTest();
   }, [duration, resetTest]);
+
+  const [wpmHistory, setWpmHistory] = useState([]);
+
+  // Reset chart history when test restarts/resets
+  useEffect(() => {
+    if (!isActive && !isFinished) {
+      setWpmHistory([]);
+    }
+  }, [isActive, isFinished]);
+
+  // Record stats every second
+  useEffect(() => {
+    if (isActive) {
+      const stats = getStats();
+      setWpmHistory((prev) => [...prev, stats.netWpm]);
+    }
+  }, [timeRemaining, isActive, getStats]);
 
   // When test finishes, automatically save score if user is logged in
   useEffect(() => {
@@ -143,6 +161,20 @@ const Home = () => {
             errors={errors}
             isActive={isActive}
           />
+
+          {/* Live WPM Graph */}
+          <AnimatePresence>
+            {isActive && wpmHistory.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="overflow-hidden"
+              >
+                <LiveWpmChart wpmHistory={wpmHistory} />
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Core Display Box */}
           <TypingDisplay
