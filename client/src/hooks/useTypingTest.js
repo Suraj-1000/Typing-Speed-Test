@@ -20,7 +20,7 @@ const truncateToWords = (text, wordLimit) => {
  * Manages core typing speed game mechanics.
  * Supports 'time' and 'words' modes.
  */
-export const useTypingTest = (mode = 'time', limit = 30, { onKeypress, onError, onSuccess } = {}) => {
+export const useTypingTest = (mode = 'time', limit = 30, { onKeypress, onError, onSuccess, customText } = {}) => {
   const callbacksRef = useRef({ onKeypress, onError, onSuccess });
   useEffect(() => {
     callbacksRef.current = { onKeypress, onError, onSuccess };
@@ -38,12 +38,16 @@ export const useTypingTest = (mode = 'time', limit = 30, { onKeypress, onError, 
 
   // Initialize/Reset test
   const resetTest = useCallback(() => {
-    const randomIdx = Math.floor(Math.random() * PARAGRAPHS.length);
-    let text = PARAGRAPHS[randomIdx];
-    if (mode === 'words') {
-      text = truncateToWords(text, limit);
+    if (mode === 'custom' && customText) {
+      setParagraph(customText);
+    } else {
+      const randomIdx = Math.floor(Math.random() * PARAGRAPHS.length);
+      let text = PARAGRAPHS[randomIdx];
+      if (mode === 'words') {
+        text = truncateToWords(text, limit);
+      }
+      setParagraph(text);
     }
-    setParagraph(text);
     setTypedText('');
     setTimeRemaining(mode === 'time' ? limit : 0);
     setIsActive(false);
@@ -51,7 +55,7 @@ export const useTypingTest = (mode = 'time', limit = 30, { onKeypress, onError, 
     setErrors(0);
     setTotalTyped(0);
     if (timerRef.current) clearInterval(timerRef.current);
-  }, [mode, limit]);
+  }, [mode, limit, customText]);
 
   useEffect(() => {
     resetTest();

@@ -18,8 +18,10 @@ import { Keyboard, Flame, Volume2, VolumeX } from 'lucide-react';
 const Home = () => {
   const { user } = useAuthStore();
   const { saveScore } = useScoreStore();
-  const [mode, setMode] = useState('time'); // 'time' or 'words'
+  const [mode, setMode] = useState('time'); // 'time' or 'words' or 'custom'
   const [limit, setLimit] = useState(30);
+  const [customInput, setCustomInput] = useState('');
+  const [customText, setCustomText] = useState('Type your own custom text to practice your typing speed and accuracy. Feel free to copy and paste any paragraphs here.');
 
   const { soundEnabled, playClick, playError, playSuccess, toggleSound } = useSoundEffects();
 
@@ -36,7 +38,8 @@ const Home = () => {
   } = useTypingTest(mode, limit, {
     onKeypress: playClick,
     onError: playError,
-    onSuccess: playSuccess
+    onSuccess: playSuccess,
+    customText
   });
 
   const [isSaving, setIsSaving] = useState(false);
@@ -148,27 +151,60 @@ const Home = () => {
                 >
                   Words
                 </button>
+                <button
+                  onClick={() => setMode('custom')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                    mode === 'custom' 
+                      ? 'bg-primary text-primary-foreground shadow' 
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                  id="mode-custom-btn"
+                >
+                  Custom
+                </button>
               </div>
 
-              {/* Limit Options Row */}
-              <div className="flex gap-2 items-center">
-                <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider font-mono">
-                  {mode === 'time' ? 'Time Limit:' : 'Word Limit:'}
-                </span>
-                {(mode === 'time' ? [15, 30, 60] : [10, 25, 50, 100]).map((option) => (
+              {/* Limit Options Row / Custom Input */}
+              {mode !== 'custom' ? (
+                <div className="flex gap-2 items-center">
+                  <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider font-mono">
+                    {mode === 'time' ? 'Time Limit:' : 'Word Limit:'}
+                  </span>
+                  {(mode === 'time' ? [15, 30, 60] : [10, 25, 50, 100]).map((option) => (
+                    <button
+                      key={option}
+                      onClick={() => setLimit(option)}
+                      className={`px-4 py-1.5 rounded-lg text-xs font-mono font-bold border transition-all cursor-pointer ${
+                        limit === option
+                          ? 'bg-primary/20 text-primary border-primary/50'
+                          : 'bg-secondary/40 text-muted-foreground border-transparent hover:border-white/10'
+                      }`}
+                    >
+                      {option}{mode === 'time' ? 's' : ''}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex gap-2 items-center">
+                  <input
+                    type="text"
+                    placeholder="Enter custom text here..."
+                    className="px-3 py-1.5 rounded-lg text-xs font-mono bg-secondary/40 border border-white/5 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50 w-48 sm:w-64"
+                    value={customInput}
+                    onChange={(e) => setCustomInput(e.target.value)}
+                  />
                   <button
-                    key={option}
-                    onClick={() => setLimit(option)}
-                    className={`px-4 py-1.5 rounded-lg text-xs font-mono font-bold border transition-all cursor-pointer ${
-                      limit === option
-                        ? 'bg-primary/20 text-primary border-primary/50'
-                        : 'bg-secondary/40 text-muted-foreground border-transparent hover:border-white/10'
-                    }`}
+                    onClick={() => {
+                      if (customInput.trim()) {
+                        setCustomText(customInput.trim());
+                      }
+                    }}
+                    className="px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30 transition-all cursor-pointer"
                   >
-                    {option}{mode === 'time' ? 's' : ''}
+                    Apply
                   </button>
-                ))}
-              </div>
+                </div>
+              )}
 
               {/* Sound toggle controls */}
               <div className="flex items-center gap-2 border-l border-white/10 pl-6">
