@@ -196,6 +196,7 @@ const Home = () => {
             timeRemaining={timeRemaining}
             errors={errors}
             isActive={isActive}
+            mode={mode}
           />
 
           {/* Live WPM Graph */}
