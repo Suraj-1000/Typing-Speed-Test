@@ -40,7 +40,7 @@ const TypingDisplay = ({ paragraph, typedText, isActive, isFinished, onKeyDown }
         autoFocus
       />
 
-      <div className="text-xl md:text-2xl leading-relaxed tracking-wide font-medium font-mono text-muted-foreground transition-all duration-300">
+      <div className="text-xl md:text-2xl leading-relaxed tracking-wide font-medium font-mono text-muted-foreground transition-all duration-300 whitespace-pre-wrap">
         {paragraph.split('').map((char, index) => {
           let charClass = "transition-all duration-150 ";
           const isTyped = index < typedText.length;
@@ -49,8 +49,8 @@ const TypingDisplay = ({ paragraph, typedText, isActive, isFinished, onKeyDown }
           if (isTyped) {
             const isCorrect = typedChars[index] === char;
             charClass += isCorrect 
-              ? "text-emerald-400 font-semibold drop-shadow-[0_0_8px_rgba(52,211,153,0.3)]" 
-              : "text-red-400 bg-red-950/30 rounded border-b-2 border-red-500 font-semibold";
+              ? "text-emerald-400 font-semibold drop-shadow-[0_0_8px_rgba(52,211,153,0.35)] char-pop-correct" 
+              : "text-red-400 bg-red-950/40 rounded border-b-2 border-red-500 font-semibold char-incorrect";
           } else if (isActiveChar && !isFinished) {
             charClass += "text-primary relative";
           } else {
@@ -60,7 +60,7 @@ const TypingDisplay = ({ paragraph, typedText, isActive, isFinished, onKeyDown }
           return (
             <span key={index} className={`${charClass} relative`}>
               {isActiveChar && !isFinished && (
-                <span className="absolute -left-[2px] top-0 bottom-0 w-[3px] bg-primary rounded-full caret-animated" />
+                <span className="absolute -left-[2px] top-0 bottom-0 w-[3px] bg-primary rounded-full caret-animated shadow-[0_0_8px_var(--color-primary)]" />
               )}
               {char}
             </span>
@@ -69,7 +69,7 @@ const TypingDisplay = ({ paragraph, typedText, isActive, isFinished, onKeyDown }
         {/* Cursor at the end of the text if fully typed */}
         {typedText.length === paragraph.length && !isFinished && (
           <span className="relative">
-            <span className="absolute -left-[2px] top-0 bottom-0 w-[3px] bg-primary rounded-full caret-animated" />
+            <span className="absolute -left-[2px] top-0 bottom-0 w-[3px] bg-primary rounded-full caret-animated shadow-[0_0_8px_var(--color-primary)]" />
           </span>
         )}
       </div>
