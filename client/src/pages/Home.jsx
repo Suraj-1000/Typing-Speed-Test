@@ -9,6 +9,7 @@ import StatsPanel from '../components/StatsPanel';
 import LiveWpmChart from '../components/LiveWpmChart';
 import ResultModal from '../components/ResultModal';
 import HistoryPanel from '../components/HistoryPanel';
+import KeyboardVisualizer from '../components/KeyboardVisualizer';
 import { Keyboard, Flame, Volume2, VolumeX } from 'lucide-react';
 
 /**
@@ -257,6 +258,17 @@ const Home = () => {
             isFinished={isFinished}
             onKeyDown={handleKeyDown}
           />
+
+          {/* Keyboard Visualizer */}
+          {!isFinished && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              <KeyboardVisualizer />
+            </motion.div>
+          )}
         </div>
       ) : (
         /* Result Screen */
