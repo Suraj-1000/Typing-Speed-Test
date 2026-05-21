@@ -9,7 +9,12 @@ const PARAGRAPHS = [
   "Modern web applications require premium designs and smooth micro-animations. Vibrant colors, clean typography, and responsive layouts combine to create unforgettable digital experiences."
 ];
 
-export const useTypingTest = (durationLimit = 30) => {
+export const useTypingTest = (durationLimit = 30, { onKeypress, onError, onSuccess } = {}) => {
+  const callbacksRef = useRef({ onKeypress, onError, onSuccess });
+  useEffect(() => {
+    callbacksRef.current = { onKeypress, onError, onSuccess };
+  }, [onKeypress, onError, onSuccess]);
+
   const [paragraph, setParagraph] = useState('');
   const [typedText, setTypedText] = useState('');
   const [timeRemaining, setTimeRemaining] = useState(durationLimit);
@@ -49,6 +54,7 @@ export const useTypingTest = (durationLimit = 30) => {
             setIsActive(false);
             setIsFinished(true);
             if (timerRef.current) clearInterval(timerRef.current);
+            if (callbacksRef.current.onSuccess) callbacksRef.current.onSuccess();
             return 0;
           }
           return prev - 1;
@@ -98,6 +104,7 @@ export const useTypingTest = (durationLimit = 30) => {
 
     if (e.key === 'Backspace') {
       setTypedText((prev) => prev.slice(0, -1));
+      if (callbacksRef.current.onKeypress) callbacksRef.current.onKeypress();
     } else if (e.key.length === 1 && typedText.length < paragraph.length) {
       const nextChar = e.key;
       const expectedChar = paragraph[typedText.length];
@@ -107,12 +114,16 @@ export const useTypingTest = (durationLimit = 30) => {
 
       if (nextChar !== expectedChar) {
         setErrors((prev) => prev + 1);
+        if (callbacksRef.current.onError) callbacksRef.current.onError();
+      } else {
+        if (callbacksRef.current.onKeypress) callbacksRef.current.onKeypress();
       }
 
       // Finish test if full paragraph is typed
       if (typedText.length + 1 === paragraph.length) {
         setIsActive(false);
         setIsFinished(true);
+        if (callbacksRef.current.onSuccess) callbacksRef.current.onSuccess();
       }
     }
   }, [isActive, isFinished, typedText, paragraph]);

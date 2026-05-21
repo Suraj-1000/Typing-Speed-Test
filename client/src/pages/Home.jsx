@@ -3,11 +3,12 @@ import { motion } from 'framer-motion';
 import { useAuthStore } from '../store/useAuthStore';
 import { useScoreStore } from '../store/useScoreStore';
 import { useTypingTest } from '../hooks/useTypingTest';
+import { useSoundEffects } from '../hooks/useSoundEffects';
 import TypingDisplay from '../components/TypingDisplay';
 import StatsPanel from '../components/StatsPanel';
 import ResultModal from '../components/ResultModal';
 import HistoryPanel from '../components/HistoryPanel';
-import { Keyboard, Flame } from 'lucide-react';
+import { Keyboard, Flame, Volume2, VolumeX } from 'lucide-react';
 
 /**
  * Home Page Component
@@ -17,6 +18,8 @@ const Home = () => {
   const { user } = useAuthStore();
   const { saveScore } = useScoreStore();
   const [duration, setDuration] = useState(30);
+
+  const { soundEnabled, playClick, playError, playSuccess, toggleSound } = useSoundEffects();
 
   const {
     paragraph,
@@ -28,7 +31,11 @@ const Home = () => {
     resetTest,
     handleKeyDown,
     getStats
-  } = useTypingTest(duration);
+  } = useTypingTest(duration, {
+    onKeypress: playClick,
+    onError: playError,
+    onSuccess: playSuccess
+  });
 
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState(null);
@@ -91,22 +98,40 @@ const Home = () => {
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="flex justify-center gap-3 items-center"
+              className="flex justify-center gap-6 items-center flex-wrap"
             >
-              <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider font-mono">Time Limit:</span>
-              {[15, 30, 60].map((time) => (
+              <div className="flex gap-2 items-center">
+                <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider font-mono">Time Limit:</span>
+                {[15, 30, 60].map((time) => (
+                  <button
+                    key={time}
+                    onClick={() => setDuration(time)}
+                    className={`px-4 py-1.5 rounded-lg text-xs font-mono font-bold border transition-all cursor-pointer ${
+                      duration === time
+                        ? 'bg-primary/20 text-primary border-primary/50'
+                        : 'bg-secondary/40 text-muted-foreground border-transparent hover:border-white/10'
+                    }`}
+                  >
+                    {time}s
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-2 border-l border-white/10 pl-6">
+                <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider font-mono">Sound:</span>
                 <button
-                  key={time}
-                  onClick={() => setDuration(time)}
-                  className={`px-4 py-1.5 rounded-lg text-xs font-mono font-bold border transition-all ${
-                    duration === time
-                      ? 'bg-primary/20 text-primary border-primary/50'
-                      : 'bg-secondary/40 text-muted-foreground border-transparent hover:border-white/10'
+                  onClick={toggleSound}
+                  className={`p-1.5 rounded-lg border transition-all cursor-pointer ${
+                    soundEnabled 
+                      ? 'bg-primary/10 border-primary/40 text-primary' 
+                      : 'bg-secondary/40 border-transparent text-muted-foreground hover:border-white/10'
                   }`}
+                  title={soundEnabled ? 'Mute Sounds' : 'Unmute Sounds'}
+                  id="sound-toggle-btn"
                 >
-                  {time}s
+                  {soundEnabled ? <Volume2 className="w-4.5 h-4.5" /> : <VolumeX className="w-4.5 h-4.5" />}
                 </button>
-              ))}
+              </div>
             </motion.div>
           )}
 
