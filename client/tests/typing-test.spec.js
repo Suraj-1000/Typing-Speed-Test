@@ -57,7 +57,7 @@ test.describe('Typing Velocity - Core Typing Game', () => {
 
     // Start typing character by character (to simulate authentic user actions)
     // We will type the exact paragraph
-    await page.keyboard.type(paragraphText);
+    await page.keyboard.type(paragraphText, { delay: 2 });
 
     // The test automatically finishes when the whole paragraph is typed.
     // The results screen (ResultModal) should display.
