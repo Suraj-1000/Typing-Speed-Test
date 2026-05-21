@@ -4,6 +4,7 @@ import { useAuthStore } from './store/useAuthStore';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ThemeSelector from './components/ThemeSelector';
 
 /**
  * Main Application Component
@@ -14,6 +15,9 @@ function App() {
 
   useEffect(() => {
     checkAuth();
+    // Pre-load theme from localStorage to avoid layout flashes
+    const savedTheme = localStorage.getItem('typo-theme') || 'theme-dark';
+    document.documentElement.classList.add(savedTheme);
   }, [checkAuth]);
 
   if (isCheckingAuth) {
@@ -35,6 +39,7 @@ function App() {
               <h1 className="text-2xl font-bold gradient-text">TypoVelocity</h1>
             </Link>
             <nav className="flex gap-4 items-center">
+              <ThemeSelector />
               {user ? (
                 <>
                   <span className="text-sm text-muted-foreground font-medium">
